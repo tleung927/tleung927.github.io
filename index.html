@@ -8,673 +8,629 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* ── RESET & BASE ──────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:        #080c14;
-      --bg2:       #0d1320;
-      --bg3:       #111827;
-      --card:      #0f1723;
-      --border:    #1e2d42;
-      --accent:    #00d4aa;
-      --accent2:   #3b82f6;
-      --text:      #e2e8f0;
-      --muted:     #64748b;
-      --muted2:    #94a3b8;
-      --mono:      'JetBrains Mono', monospace;
-      --sans:      'Inter', sans-serif;
+      --bg:     #080c14; --bg2: #0d1320; --bg3: #111827;
+      --card:   #0f1723; --border: #1e2d42;
+      --accent: #00d4aa; --accent2: #3b82f6; --accent3: #a78bfa;
+      --text:   #e2e8f0; --muted: #64748b; --muted2: #94a3b8;
+      --mono:   'JetBrains Mono', monospace;
+      --sans:   'Inter', sans-serif;
     }
-
     html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-      font-size: 15px;
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
-    }
-
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
+    ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-    /* ── SCROLLBAR ─────────────────────────────────────────────── */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-    /* ── NAV ───────────────────────────────────────────────────── */
+    /* ── NAV ── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 6vw;
-      height: 60px;
-      background: rgba(8,12,20,0.85);
-      backdrop-filter: blur(12px);
+      padding: 0 6vw; height: 60px;
+      background: rgba(8,12,20,0.88); backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border);
     }
-    .nav-logo {
-      font-family: var(--mono);
-      font-size: 15px;
-      color: var(--accent);
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-    .nav-links { display: flex; gap: 28px; }
-    .nav-links a {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--muted2);
-      letter-spacing: 0.3px;
-      transition: color 0.2s;
-    }
+    .nav-logo { font-family: var(--mono); font-size: 15px; color: var(--accent); font-weight: 600; }
+    .nav-links { display: flex; gap: 26px; }
+    .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted2); transition: color .2s; }
     .nav-links a:hover { color: var(--accent); text-decoration: none; }
+    @media(max-width:600px){ .nav-links { display:none; } }
 
-    /* ── HERO ──────────────────────────────────────────────────── */
+    /* ── HERO ── */
     #hero {
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      padding: 100px 6vw 60px;
-      position: relative;
-      overflow: hidden;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 100px 6vw 60px; position: relative; overflow: hidden;
     }
-    .hero-grid {
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(0,212,170,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,212,170,0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
-      mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
-    }
-    .hero-inner { position: relative; max-width: 760px; }
-
+    #hero-canvas { position: absolute; inset: 0; opacity: .18; }
+    .hero-inner { position: relative; z-index: 2; max-width: 780px; }
     .hero-tag {
       display: inline-flex; align-items: center; gap: 8px;
-      font-family: var(--mono); font-size: 12px;
-      color: var(--accent); background: rgba(0,212,170,0.1);
-      border: 1px solid rgba(0,212,170,0.25);
-      padding: 4px 12px; border-radius: 20px;
-      margin-bottom: 24px;
+      font-family: var(--mono); font-size: 12px; color: var(--accent);
+      background: rgba(0,212,170,.1); border: 1px solid rgba(0,212,170,.25);
+      padding: 4px 12px; border-radius: 20px; margin-bottom: 22px;
     }
-    .hero-tag::before { content: '●'; font-size: 8px; animation: blink 1.2s infinite; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-
-    h1 {
-      font-size: clamp(2.4rem, 5vw, 3.6rem);
-      font-weight: 700;
-      line-height: 1.15;
-      margin-bottom: 8px;
-    }
+    .hero-tag::before { content:'●'; font-size:8px; animation: blink 1.2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+    h1 { font-size: clamp(2.4rem,5vw,3.6rem); font-weight: 700; line-height: 1.15; margin-bottom: 8px; }
     .hero-name { color: var(--text); }
     .hero-accent { color: var(--accent); }
+    .hero-sub { font-family: var(--mono); font-size: clamp(13px,2vw,15px); color: var(--muted2); margin-bottom: 24px; min-height: 24px; }
+    .cursor { display:inline-block; width:2px; height:1em; background:var(--accent); margin-left:2px; animation:blink 1s infinite; vertical-align:text-bottom; }
+    .hero-desc { font-size: 15px; color: var(--muted2); max-width: 580px; margin-bottom: 34px; line-height: 1.8; }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn { display:inline-flex; align-items:center; gap:7px; padding:10px 22px; border-radius:6px; font-size:14px; font-weight:500; transition:all .2s; cursor:pointer; }
+    .btn-primary { background:var(--accent); color:#000; border:1px solid var(--accent); }
+    .btn-primary:hover { background:#00f0c0; text-decoration:none; }
+    .btn-outline { background:transparent; color:var(--text); border:1px solid var(--border); }
+    .btn-outline:hover { border-color:var(--accent); color:var(--accent); text-decoration:none; }
+    .hero-stats { display:flex; gap:40px; margin-top:50px; padding-top:26px; border-top:1px solid var(--border); flex-wrap:wrap; }
+    .stat-num { font-family:var(--mono); font-size:26px; font-weight:600; color:var(--accent); }
+    .stat-label { font-size:12px; color:var(--muted); margin-top:2px; }
 
-    .hero-sub {
-      font-family: var(--mono);
-      font-size: clamp(14px, 2vw, 16px);
-      color: var(--muted2);
-      margin-bottom: 28px;
-    }
-    .hero-sub .cursor {
-      display: inline-block;
-      width: 2px; height: 1em;
-      background: var(--accent);
-      margin-left: 2px;
-      animation: blink 1s infinite;
-      vertical-align: text-bottom;
-    }
-
-    .hero-desc {
-      font-size: 15px;
-      color: var(--muted2);
-      max-width: 580px;
-      margin-bottom: 36px;
-      line-height: 1.8;
-    }
-
-    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
-
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 22px;
-      border-radius: 6px;
-      font-size: 14px; font-weight: 500;
-      transition: all 0.2s;
-      cursor: pointer;
-    }
-    .btn-primary {
-      background: var(--accent); color: #000;
-      border: 1px solid var(--accent);
-    }
-    .btn-primary:hover { background: #00f0c0; text-decoration: none; }
-    .btn-outline {
-      background: transparent; color: var(--text);
-      border: 1px solid var(--border);
-    }
-    .btn-outline:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
-
-    .hero-stats {
-      display: flex; gap: 40px; margin-top: 56px;
-      padding-top: 28px;
-      border-top: 1px solid var(--border);
-    }
-    .stat-num {
-      font-family: var(--mono);
-      font-size: 26px; font-weight: 600;
-      color: var(--accent);
-    }
-    .stat-label {
-      font-size: 12px; color: var(--muted);
-      margin-top: 2px;
-    }
-
-    /* ── SHARED SECTION ────────────────────────────────────────── */
-    section { padding: 90px 6vw; }
+    /* ── SECTION SHARED ── */
+    section { padding: 88px 6vw; }
     section:nth-child(even) { background: var(--bg2); }
+    .section-tag { font-family:var(--mono); font-size:12px; color:var(--accent); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:8px; }
+    h2 { font-size:clamp(1.6rem,3vw,2.2rem); font-weight:700; margin-bottom:12px; line-height:1.2; }
+    .section-intro { font-size:15px; color:var(--muted2); max-width:580px; margin-bottom:44px; line-height:1.8; }
 
-    .section-tag {
-      font-family: var(--mono); font-size: 12px;
-      color: var(--accent); letter-spacing: 1.5px;
-      text-transform: uppercase; margin-bottom: 10px;
+    /* ── VIDEO REEL ── */
+    #reel {
+      padding: 0; position: relative; overflow: hidden;
+      height: 480px; display: flex; align-items: center; justify-content: center;
     }
-    h2 {
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
-      font-weight: 700; margin-bottom: 14px;
-      line-height: 1.2;
+    #reel video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; opacity: .35;
     }
-    .section-intro {
-      font-size: 15px; color: var(--muted2);
-      max-width: 580px; margin-bottom: 48px; line-height: 1.8;
+    .reel-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, var(--bg) 0%, transparent 20%, transparent 80%, var(--bg) 100%);
     }
-
-    /* ── SERVICES ──────────────────────────────────────────────── */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
+    .reel-content {
+      position: relative; z-index: 2; text-align: center; padding: 0 6vw;
     }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 28px;
-      transition: border-color 0.25s, transform 0.25s;
-    }
-    .card:hover { border-color: var(--accent); transform: translateY(-3px); }
-
-    .card-icon {
-      width: 44px; height: 44px;
-      background: rgba(0,212,170,0.1);
-      border: 1px solid rgba(0,212,170,0.2);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; margin-bottom: 18px;
-    }
-    .card h3 { font-size: 16px; font-weight: 600; margin-bottom: 10px; }
-    .card p { font-size: 13.5px; color: var(--muted2); line-height: 1.75; margin-bottom: 18px; }
-
-    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-    .tag {
+    .reel-content h2 { font-size: clamp(1.8rem,4vw,2.8rem); margin-bottom: 14px; }
+    .reel-content p { font-size: 15px; color: var(--muted2); max-width: 520px; margin: 0 auto 28px; line-height: 1.8; }
+    .reel-badges { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+    .reel-badge {
       font-family: var(--mono); font-size: 11px;
-      color: var(--accent2); background: rgba(59,130,246,0.1);
-      border: 1px solid rgba(59,130,246,0.2);
-      padding: 2px 9px; border-radius: 4px;
+      border: 1px solid var(--border); color: var(--muted2);
+      background: rgba(0,212,170,.06); padding: 5px 14px; border-radius: 20px;
     }
 
-    /* ── PROJECTS ──────────────────────────────────────────────── */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
+    /* ── SHOWCASE ── */
+    .showcase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 22px; }
+    .showcase-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+      transition: border-color .25s, transform .25s;
     }
-    .project-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 26px;
-      display: flex; flex-direction: column;
-      transition: border-color 0.25s, transform 0.25s;
+    .showcase-card:hover { border-color: var(--accent2); transform: translateY(-3px); }
+    .sc-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px; background: #050810;
+      border-bottom: 1px solid var(--border);
     }
-    .project-card:hover { border-color: var(--accent2); transform: translateY(-3px); }
-
-    .project-header {
-      display: flex; align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
-    }
-    .project-icon { font-size: 22px; }
-    .project-badge {
-      font-family: var(--mono); font-size: 10px;
-      color: var(--accent); background: rgba(0,212,170,0.1);
-      border: 1px solid rgba(0,212,170,0.2);
-      padding: 2px 8px; border-radius: 20px;
-    }
-    .project-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
-    .project-card p { font-size: 13.5px; color: var(--muted2); line-height: 1.75; flex: 1; margin-bottom: 18px; }
-    .project-stack { display: flex; flex-wrap: wrap; gap: 6px; }
-    .stack-tag {
-      font-family: var(--mono); font-size: 11px;
-      color: var(--muted2); background: var(--bg3);
-      border: 1px solid var(--border);
-      padding: 2px 8px; border-radius: 4px;
+    .sc-dots { display:flex; gap:5px; }
+    .sc-dots span { width:10px; height:10px; border-radius:50%; }
+    .sc-dot-r { background:#ff5f57; } .sc-dot-y { background:#febc2e; } .sc-dot-g { background:#28c840; }
+    .sc-title { font-family:var(--mono); font-size:11px; color:var(--muted); }
+    .sc-body { padding: 18px 18px 20px; font-family: var(--mono); font-size: 12.5px; line-height: 2; min-height: 220px; }
+    .sc-prompt { color: var(--accent); }
+    .sc-out { color: var(--muted2); }
+    .sc-ok { color: #28c840; }
+    .sc-warn { color: #febc2e; }
+    .sc-line { display: block; }
+    .sc-label {
+      display: inline-block; background: rgba(0,212,170,.1);
+      border: 1px solid rgba(0,212,170,.2);
+      color: var(--accent); font-size: 10px; padding: 2px 8px;
+      border-radius: 4px; margin-bottom: 12px;
     }
 
-    /* ── SKILLS ────────────────────────────────────────────────── */
-    .skills-wrapper {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 24px;
-    }
-    .skill-group {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 22px 24px;
-    }
-    .skill-group-title {
-      font-family: var(--mono); font-size: 12px;
-      color: var(--accent); letter-spacing: 1px;
-      text-transform: uppercase; margin-bottom: 14px;
-    }
-    .skill-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-    .pill {
-      font-size: 12.5px;
-      color: var(--muted2);
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      padding: 4px 12px; border-radius: 5px;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .pill:hover { border-color: var(--accent); color: var(--accent); }
+    /* typing animation for showcase */
+    .type-line { overflow: hidden; white-space: nowrap; }
+    .type-line.t1 { animation: reveal .6s steps(40,end) .3s both; }
+    .type-line.t2 { animation: reveal .8s steps(40,end) 1.2s both; }
+    .type-line.t3 { animation: reveal .5s steps(40,end) 2.4s both; }
+    .type-line.t4 { animation: reveal .6s steps(40,end) 3.1s both; }
+    .type-line.t5 { animation: reveal .5s steps(40,end) 3.9s both; }
+    .type-line.t6 { animation: reveal .4s steps(40,end) 4.6s both; }
+    .type-line.t7 { animation: reveal .4s steps(40,end) 5.2s both; }
+    .type-line.t8 { animation: reveal .4s steps(40,end) 5.8s both; }
+    @keyframes reveal { from{max-width:0} to{max-width:100%} }
+    .fade-in { opacity: 0; }
+    .fade-in.f1 { animation: fadein .4s ease 1.6s both; }
+    .fade-in.f2 { animation: fadein .4s ease 2.8s both; }
+    .fade-in.f3 { animation: fadein .4s ease 3.5s both; }
+    .fade-in.f4 { animation: fadein .4s ease 4.2s both; }
+    .fade-in.f5 { animation: fadein .4s ease 5.0s both; }
+    .fade-in.f6 { animation: fadein .4s ease 5.6s both; }
+    .fade-in.f7 { animation: fadein .4s ease 6.2s both; }
+    @keyframes fadein { from{opacity:0} to{opacity:1} }
 
-    /* ── TERMINAL BLOCK ────────────────────────────────────────── */
-    .terminal {
-      background: #050810;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px 28px;
-      font-family: var(--mono);
-      font-size: 13px;
-      line-height: 2;
-      max-width: 640px;
-    }
-    .terminal-bar {
-      display: flex; gap: 7px; margin-bottom: 18px;
-    }
-    .terminal-bar span {
-      width: 12px; height: 12px; border-radius: 50%;
-    }
-    .t-red   { background: #ff5f57; }
-    .t-yellow{ background: #febc2e; }
-    .t-green { background: #28c840; }
-    .t-cmd { color: var(--accent); }
-    .t-out { color: var(--muted2); }
-    .t-dim { color: var(--muted); }
+    /* ── PROJECTS ── */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 20px; }
+    .project-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:26px; display:flex; flex-direction:column; transition:border-color .25s,transform .25s; }
+    .project-card:hover { border-color:var(--accent2); transform:translateY(-3px); }
+    .project-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    .project-icon { font-size:22px; }
+    .project-badge { font-family:var(--mono); font-size:10px; color:var(--accent); background:rgba(0,212,170,.1); border:1px solid rgba(0,212,170,.2); padding:2px 8px; border-radius:20px; }
+    .project-card h3 { font-size:15px; font-weight:600; margin-bottom:8px; }
+    .project-card p { font-size:13.5px; color:var(--muted2); line-height:1.75; flex:1; margin-bottom:16px; }
+    .project-stack { display:flex; flex-wrap:wrap; gap:6px; }
+    .stack-tag { font-family:var(--mono); font-size:11px; color:var(--muted2); background:var(--bg3); border:1px solid var(--border); padding:2px 8px; border-radius:4px; }
 
-    /* ── CONTACT ───────────────────────────────────────────────── */
-    #contact {
-      text-align: center;
-      background: var(--bg);
-      border-top: 1px solid var(--border);
-    }
-    .contact-inner { max-width: 560px; margin: 0 auto; }
-    .contact-inner h2 { margin-bottom: 14px; }
-    .contact-inner p { color: var(--muted2); margin-bottom: 36px; }
-    .contact-links { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    /* ── SERVICES ── */
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 20px; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:28px; transition:border-color .25s,transform .25s; }
+    .card:hover { border-color:var(--accent); transform:translateY(-3px); }
+    .card-icon { width:44px; height:44px; background:rgba(0,212,170,.1); border:1px solid rgba(0,212,170,.2); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:18px; }
+    .card h3 { font-size:16px; font-weight:600; margin-bottom:10px; }
+    .card p { font-size:13.5px; color:var(--muted2); line-height:1.75; margin-bottom:18px; }
+    .card-tags { display:flex; flex-wrap:wrap; gap:6px; }
+    .tag { font-family:var(--mono); font-size:11px; color:var(--accent2); background:rgba(59,130,246,.1); border:1px solid rgba(59,130,246,.2); padding:2px 9px; border-radius:4px; }
 
-    /* ── FOOTER ────────────────────────────────────────────────── */
-    footer {
-      text-align: center;
-      padding: 28px 6vw;
-      border-top: 1px solid var(--border);
-      font-size: 12.5px;
-      color: var(--muted);
-      font-family: var(--mono);
-    }
+    /* ── SKILLS ── */
+    .skills-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 20px; }
+    .skill-group { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:22px 24px; }
+    .skill-group-title { font-family:var(--mono); font-size:12px; color:var(--accent); letter-spacing:1px; text-transform:uppercase; margin-bottom:12px; }
+    .skill-pills { display:flex; flex-wrap:wrap; gap:8px; }
+    .pill { font-size:12.5px; color:var(--muted2); background:var(--bg3); border:1px solid var(--border); padding:4px 12px; border-radius:5px; transition:border-color .2s,color .2s; cursor:default; }
+    .pill:hover { border-color:var(--accent); color:var(--accent); }
 
-    /* ── RESPONSIVE ────────────────────────────────────────────── */
-    @media (max-width: 600px) {
-      .nav-links { display: none; }
-      .hero-stats { gap: 24px; }
-      section { padding: 64px 5vw; }
+    /* ── EDUCATION ── */
+    .edu-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    @media(max-width:760px){ .edu-layout { grid-template-columns: 1fr; } }
+
+    .edu-timeline { position: relative; padding-left: 28px; }
+    .edu-timeline::before {
+      content:''; position:absolute; left:8px; top:6px; bottom:0;
+      width:1px; background: linear-gradient(to bottom, var(--accent), transparent);
     }
+    .edu-item { position:relative; margin-bottom:32px; }
+    .edu-dot {
+      position:absolute; left:-24px; top:4px;
+      width:14px; height:14px; border-radius:50%;
+      background:var(--bg); border:2px solid var(--accent);
+      box-shadow: 0 0 8px rgba(0,212,170,.4);
+    }
+    .edu-item.dim .edu-dot { border-color: var(--border); box-shadow: none; }
+    .edu-year { font-family:var(--mono); font-size:11px; color:var(--accent); margin-bottom:4px; }
+    .edu-item.dim .edu-year { color:var(--muted); }
+    .edu-title { font-size:14px; font-weight:600; margin-bottom:3px; }
+    .edu-org { font-size:12.5px; color:var(--muted2); margin-bottom:4px; }
+    .edu-badge {
+      display:inline-block; font-family:var(--mono); font-size:10px;
+      padding:2px 8px; border-radius:4px; margin-top:4px;
+    }
+    .badge-done { background:rgba(0,212,170,.12); color:var(--accent); border:1px solid rgba(0,212,170,.25); }
+    .badge-prog { background:rgba(251,191,36,.1); color:#fbbf24; border:1px solid rgba(251,191,36,.25); }
+    .badge-deg  { background:rgba(167,139,250,.12); color:var(--accent3); border:1px solid rgba(167,139,250,.3); }
+
+    .cert-grid { display:flex; flex-direction:column; gap:14px; }
+    .cert-card {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:8px; padding:16px 18px;
+      display:flex; align-items:flex-start; gap:14px;
+      transition:border-color .2s;
+    }
+    .cert-card:hover { border-color:var(--accent); }
+    .cert-icon { font-size:22px; flex-shrink:0; margin-top:2px; }
+    .cert-name { font-size:13.5px; font-weight:600; margin-bottom:3px; }
+    .cert-org { font-size:12px; color:var(--muted2); }
+    .cert-meta { display:flex; align-items:center; gap:8px; margin-top:6px; }
+    .cert-free { font-family:var(--mono); font-size:10px; color:#28c840; background:rgba(40,200,64,.1); border:1px solid rgba(40,200,64,.2); padding:1px 7px; border-radius:4px; }
+    .cert-year { font-family:var(--mono); font-size:10px; color:var(--muted); }
+
+    /* ── CONTACT ── */
+    #contact { text-align:center; background:var(--bg); border-top:1px solid var(--border); }
+    .contact-inner { max-width:560px; margin:0 auto; }
+    .contact-inner h2 { margin-bottom:12px; }
+    .contact-inner p { color:var(--muted2); margin-bottom:32px; }
+    .contact-links { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+    /* ── FOOTER ── */
+    footer { text-align:center; padding:26px 6vw; border-top:1px solid var(--border); font-size:12.5px; color:var(--muted); font-family:var(--mono); }
+
+    /* ── REVEAL ANIMATION ── */
+    .reveal { opacity:0; transform:translateY(22px); transition:opacity .55s ease, transform .55s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
   </style>
 </head>
 <body>
 
-<!-- ── NAV ──────────────────────────────────────────────────────── -->
+<!-- NAV -->
 <nav>
   <div class="nav-logo">~/t.leung</div>
   <div class="nav-links">
+    <a href="#reel">Demo</a>
+    <a href="#showcase">Showcase</a>
     <a href="#services">Services</a>
     <a href="#projects">Projects</a>
-    <a href="#skills">Skills</a>
+    <a href="#education">Education</a>
     <a href="#contact">Contact</a>
   </div>
 </nav>
 
-<!-- ── HERO ─────────────────────────────────────────────────────── -->
+<!-- HERO -->
 <section id="hero">
-  <div class="hero-grid"></div>
+  <canvas id="hero-canvas"></canvas>
   <div class="hero-inner">
     <div class="hero-tag">Available for freelance work</div>
-
     <h1>
       <span class="hero-name">T. Leung</span><br/>
       <span class="hero-accent">Linux &amp; AI Specialist</span>
     </h1>
-
-    <p class="hero-sub">
-      <span id="typed"></span><span class="cursor"></span>
-    </p>
-
+    <p class="hero-sub"><span id="typed"></span><span class="cursor"></span></p>
     <p class="hero-desc">
       I set up Linux servers, deploy local AI systems with Ollama and OpenClaw,
-      configure Proxmox virtualization environments, and build Python automation
+      configure Proxmox virtualisation environments, and build Python automation
       that runs reliably long after the job is done.
     </p>
-
     <div class="hero-btns">
       <a class="btn btn-primary" href="#contact">Hire me on Fiverr</a>
-      <a class="btn btn-outline" href="#projects">See my work</a>
+      <a class="btn btn-outline" href="#showcase">Watch it work ↓</a>
     </div>
-
     <div class="hero-stats">
-      <div>
-        <div class="stat-num">3+</div>
-        <div class="stat-label">Years experience</div>
-      </div>
-      <div>
-        <div class="stat-num">100%</div>
-        <div class="stat-label">Remote-friendly</div>
-      </div>
-      <div>
-        <div class="stat-num">3</div>
-        <div class="stat-label">Core services</div>
-      </div>
+      <div><div class="stat-num">3+</div><div class="stat-label">Years hands-on</div></div>
+      <div><div class="stat-num">100%</div><div class="stat-label">Remote-friendly</div></div>
+      <div><div class="stat-num">3</div><div class="stat-label">Core services</div></div>
     </div>
   </div>
 </section>
 
-<!-- ── SERVICES ─────────────────────────────────────────────────── -->
-<section id="services">
-  <div class="section-tag">// what I do</div>
-  <h2>Services</h2>
+<!-- VIDEO REEL -->
+<div id="reel">
+  <video autoplay muted loop playsinline poster="">
+    <!-- Royalty-free server room footage from Pexels (direct MP4) -->
+    <source src="https://videos.pexels.com/video-files/3129957/3129957-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+  </video>
+  <div class="reel-overlay"></div>
+  <div class="reel-content">
+    <div class="section-tag">// live infrastructure</div>
+    <h2>Built. Deployed. Running.</h2>
+    <p>
+      Every service I set up for clients mirrors what I run on my own homelab —
+      configured from scratch, tested under real conditions, documented for handover.
+    </p>
+    <div class="reel-badges">
+      <span class="reel-badge">Proxmox VE 8.x</span>
+      <span class="reel-badge">Ollama + DeepSeek-R1</span>
+      <span class="reel-badge">OpenClaw Gateway</span>
+      <span class="reel-badge">Ubuntu 24.04 LTS</span>
+      <span class="reel-badge">Python 3.12</span>
+      <span class="reel-badge">systemd services</span>
+    </div>
+  </div>
+</div>
+
+<!-- SHOWCASE -->
+<section id="showcase">
+  <div class="section-tag">// see it in action</div>
+  <h2>Live Showcase</h2>
   <p class="section-intro">
-    Three focused services — each one something I run and maintain on my own infrastructure every day.
+    Animated replays of real terminal sessions from actual deployments.
   </p>
 
-  <div class="cards-grid">
-    <div class="card">
-      <div class="card-icon">🤖</div>
-      <h3>Local AI Setup</h3>
-      <p>
-        I deploy private, self-hosted AI assistants using Ollama and OpenClaw on your Linux server.
-        No cloud fees, no data leaving your network. Connected to Telegram or any messaging app you already use.
-      </p>
-      <div class="card-tags">
-        <span class="tag">Ollama</span>
-        <span class="tag">OpenClaw</span>
-        <span class="tag">DeepSeek</span>
-        <span class="tag">Telegram</span>
-        <span class="tag">systemd</span>
+  <div class="showcase-grid">
+
+    <!-- Demo 1: Ollama + OpenClaw -->
+    <div class="showcase-card reveal">
+      <div class="sc-header">
+        <div class="sc-dots"><span class="sc-dot-r"></span><span class="sc-dot-y"></span><span class="sc-dot-g"></span></div>
+        <span class="sc-title">root@server ~ — AI Setup</span>
+      </div>
+      <div class="sc-body">
+        <span class="sc-label">Local AI Deployment</span>
+        <span class="sc-line type-line t1"><span class="sc-prompt">~$</span> apt install -y curl</span>
+        <span class="sc-line fade-in f1"><span class="sc-ok">✓</span> <span class="sc-out">curl installed</span></span>
+        <span class="sc-line type-line t2"><span class="sc-prompt">~$</span> curl -fsSL https://ollama.ai/install.sh | sh</span>
+        <span class="sc-line fade-in f2"><span class="sc-ok">✓</span> <span class="sc-out">Ollama installed (v0.9.0)</span></span>
+        <span class="sc-line type-line t3"><span class="sc-prompt">~$</span> ollama pull deepseek-r1:8b</span>
+        <span class="sc-line fade-in f3"><span class="sc-out">pulling manifest… ████████ 100%</span></span>
+        <span class="sc-line type-line t4"><span class="sc-prompt">~$</span> npm install -g openclaw</span>
+        <span class="sc-line fade-in f4"><span class="sc-ok">✓</span> <span class="sc-out">added 346 packages</span></span>
+        <span class="sc-line type-line t5"><span class="sc-prompt">~$</span> systemctl enable --now openclaw</span>
+        <span class="sc-line fade-in f5"><span class="sc-ok">●</span> <span class="sc-out">openclaw.service — <span class="sc-ok">active (running)</span></span></span>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-icon">🖥️</div>
-      <h3>Proxmox &amp; Virtualisation</h3>
-      <p>
-        Full Proxmox VE installation and configuration — LXC containers, KVM virtual machines,
-        networking, storage pools. Everything starts cleanly after a reboot with no babysitting required.
-      </p>
-      <div class="card-tags">
-        <span class="tag">Proxmox VE</span>
-        <span class="tag">LXC</span>
-        <span class="tag">KVM</span>
-        <span class="tag">ZFS</span>
-        <span class="tag">Networking</span>
+    <!-- Demo 2: Proxmox LXC -->
+    <div class="showcase-card reveal">
+      <div class="sc-header">
+        <div class="sc-dots"><span class="sc-dot-r"></span><span class="sc-dot-y"></span><span class="sc-dot-g"></span></div>
+        <span class="sc-title">root@pve ~ — Proxmox Setup</span>
+      </div>
+      <div class="sc-body">
+        <span class="sc-label">Proxmox LXC Deployment</span>
+        <span class="sc-line type-line t1"><span class="sc-prompt">~$</span> pct create 100 local:vztmpl/debian-12.tar.xz</span>
+        <span class="sc-line fade-in f1"><span class="sc-out">  --hostname openclaw --memory 2048</span></span>
+        <span class="sc-line fade-in f2"><span class="sc-ok">✓</span> <span class="sc-out">Container 100 created</span></span>
+        <span class="sc-line type-line t3"><span class="sc-prompt">~$</span> pct set 100 --net0 name=eth0,bridge=vmbr0,ip=dhcp</span>
+        <span class="sc-line fade-in f3"><span class="sc-ok">✓</span> <span class="sc-out">Network configured</span></span>
+        <span class="sc-line type-line t4"><span class="sc-prompt">~$</span> pct start 100 &amp;&amp; pct status 100</span>
+        <span class="sc-line fade-in f4"><span class="sc-out">status: <span class="sc-ok">running</span></span></span>
+        <span class="sc-line type-line t5"><span class="sc-prompt">~$</span> pct exec 100 -- bash -c "apt update -q &amp;&amp; apt install -y nodejs npm"</span>
+        <span class="sc-line fade-in f5"><span class="sc-ok">✓</span> <span class="sc-out">Node.js v22 ready inside container</span></span>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-icon">🐍</div>
-      <h3>Python Automation</h3>
-      <p>
-        Custom Python scripts that handle the repetitive work — backups, monitoring, Telegram alerts,
-        API integrations, file pipelines. Clean code with logging and a README so you can maintain it yourself.
-      </p>
-      <div class="card-tags">
-        <span class="tag">Python</span>
-        <span class="tag">Bash</span>
-        <span class="tag">cron</span>
-        <span class="tag">REST APIs</span>
-        <span class="tag">systemd</span>
+    <!-- Demo 3: Python Monitor -->
+    <div class="showcase-card reveal">
+      <div class="sc-header">
+        <div class="sc-dots"><span class="sc-dot-r"></span><span class="sc-dot-y"></span><span class="sc-dot-g"></span></div>
+        <span class="sc-title">root@server ~ — Python Automation</span>
+      </div>
+      <div class="sc-body">
+        <span class="sc-label">Monitoring &amp; Alerting</span>
+        <span class="sc-line type-line t1"><span class="sc-prompt">~$</span> python3 monitor.py --start</span>
+        <span class="sc-line fade-in f1"><span class="sc-out">🔍 Checking system health…</span></span>
+        <span class="sc-line fade-in f2"><span class="sc-ok">✓</span> <span class="sc-out">CPU: 12%  RAM: 3.1/8 GB  Disk: 47%</span></span>
+        <span class="sc-line fade-in f3"><span class="sc-ok">✓</span> <span class="sc-out">Services: openclaw ● nginx ● sshd ●</span></span>
+        <span class="sc-line type-line t4"><span class="sc-prompt">~$</span> # simulate high CPU alert</span>
+        <span class="sc-line fade-in f4"><span class="sc-warn">⚠</span>  <span class="sc-out">CPU spike: 91% — sending Telegram alert</span></span>
+        <span class="sc-line fade-in f5"><span class="sc-ok">✓</span> <span class="sc-out">Alert sent → @your_telegram</span></span>
+        <span class="sc-line type-line t6"><span class="sc-prompt">~$</span> crontab -l | grep monitor</span>
+        <span class="sc-line fade-in f6"><span class="sc-out">*/5 * * * * python3 /opt/monitor.py</span></span>
       </div>
     </div>
+
   </div>
 </section>
 
-<!-- ── PROJECTS ──────────────────────────────────────────────────── -->
+<!-- PROJECTS -->
 <section id="projects">
   <div class="section-tag">// what I've built</div>
   <h2>Projects</h2>
-  <p class="section-intro">
-    Real things running on my own hardware — not tutorials, not demos.
-  </p>
-
+  <p class="section-intro">Real things running on my own hardware — not tutorials, not demos.</p>
   <div class="projects-grid">
-    <div class="project-card">
-      <div class="project-header">
-        <span class="project-icon">🧠</span>
-        <span class="project-badge">Homelab</span>
-      </div>
+    <div class="project-card reveal">
+      <div class="project-header"><span class="project-icon">🧠</span><span class="project-badge">Homelab</span></div>
       <h3>Self-Hosted AI Gateway</h3>
-      <p>
-        Deployed OpenClaw + Ollama on a Proxmox LXC container running DeepSeek-R1:8b.
-        Integrated with Telegram for daily use. Configured systemd service, persistent auth tokens,
-        and DM allowlist policies for secure private access.
-      </p>
-      <div class="project-stack">
-        <span class="stack-tag">Ollama</span>
-        <span class="stack-tag">OpenClaw</span>
-        <span class="stack-tag">LXC</span>
-        <span class="stack-tag">DeepSeek-R1</span>
-        <span class="stack-tag">Telegram</span>
-      </div>
+      <p>Deployed OpenClaw + Ollama on a Proxmox LXC container running DeepSeek-R1:8b. Integrated with Telegram for daily use. Configured systemd service, persistent auth tokens, and DM allowlist policies for secure private access.</p>
+      <div class="project-stack"><span class="stack-tag">Ollama</span><span class="stack-tag">OpenClaw</span><span class="stack-tag">LXC</span><span class="stack-tag">DeepSeek-R1</span><span class="stack-tag">Telegram</span></div>
     </div>
-
-    <div class="project-card">
-      <div class="project-header">
-        <span class="project-icon">⚙️</span>
-        <span class="project-badge">Infrastructure</span>
-      </div>
+    <div class="project-card reveal">
+      <div class="project-header"><span class="project-icon">⚙️</span><span class="project-badge">Infrastructure</span></div>
       <h3>Proxmox Multi-Container Lab</h3>
-      <p>
-        Multi-container Proxmox environment running AI workloads and automation services side by side.
-        Configured bridged networking, container-level SSH, static IPs, and automated startup
-        for every service.
-      </p>
-      <div class="project-stack">
-        <span class="stack-tag">Proxmox VE</span>
-        <span class="stack-tag">LXC</span>
-        <span class="stack-tag">Debian</span>
-        <span class="stack-tag">systemd</span>
-        <span class="stack-tag">Networking</span>
+      <p>Multi-container Proxmox environment running AI workloads and automation services side by side. Configured bridged networking, container-level SSH, static IPs, and automated startup for every service.</p>
+      <div class="project-stack"><span class="stack-tag">Proxmox VE</span><span class="stack-tag">LXC</span><span class="stack-tag">Debian</span><span class="stack-tag">systemd</span><span class="stack-tag">Networking</span></div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-header"><span class="project-icon">📡</span><span class="project-badge">Automation</span></div>
+      <h3>Linux Automation Suite</h3>
+      <p>Python scripts for scheduled backups, system health monitoring with Telegram alerts, log parsing, and remote API integrations — all with structured logging and environment-based configuration.</p>
+      <div class="project-stack"><span class="stack-tag">Python</span><span class="stack-tag">Bash</span><span class="stack-tag">cron</span><span class="stack-tag">Telegram API</span><span class="stack-tag">REST</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-tag">// what I do</div>
+  <h2>Services</h2>
+  <p class="section-intro">Three focused services — each one something I run and maintain on my own infrastructure every day.</p>
+  <div class="cards-grid">
+    <div class="card reveal">
+      <div class="card-icon">🤖</div>
+      <h3>Local AI Setup</h3>
+      <p>Private, self-hosted AI assistants using Ollama and OpenClaw on your Linux server. No cloud fees, no data leaving your network. Connected to Telegram or any messaging app you already use.</p>
+      <div class="card-tags"><span class="tag">Ollama</span><span class="tag">OpenClaw</span><span class="tag">DeepSeek</span><span class="tag">Telegram</span><span class="tag">systemd</span></div>
+    </div>
+    <div class="card reveal">
+      <div class="card-icon">🖥️</div>
+      <h3>Proxmox &amp; Virtualisation</h3>
+      <p>Full Proxmox VE installation and configuration — LXC containers, KVM VMs, networking, storage pools. Everything starts cleanly after a reboot with no babysitting required.</p>
+      <div class="card-tags"><span class="tag">Proxmox VE</span><span class="tag">LXC</span><span class="tag">KVM</span><span class="tag">ZFS</span><span class="tag">Networking</span></div>
+    </div>
+    <div class="card reveal">
+      <div class="card-icon">🐍</div>
+      <h3>Python Automation</h3>
+      <p>Custom Python scripts that handle the repetitive work — backups, monitoring, Telegram alerts, API integrations, file pipelines. Clean code with logging and a README so you can maintain it yourself.</p>
+      <div class="card-tags"><span class="tag">Python</span><span class="tag">Bash</span><span class="tag">cron</span><span class="tag">REST APIs</span><span class="tag">systemd</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-tag">// background &amp; learning</div>
+  <h2>Education</h2>
+  <p class="section-intro">Formal foundation plus continuous hands-on learning — because in this field, the lab teaches more than the classroom.</p>
+
+  <div class="edu-layout">
+    <!-- Timeline -->
+    <div>
+      <h3 style="font-size:14px;color:var(--muted2);font-weight:500;margin-bottom:28px;letter-spacing:.5px">ACADEMIC</h3>
+      <div class="edu-timeline">
+        <div class="edu-item reveal">
+          <div class="edu-dot"></div>
+          <div class="edu-year">University</div>
+          <div class="edu-title">Bachelor of Science</div>
+          <div class="edu-org">Computer Science &amp; Information Technology</div>
+          <span class="edu-badge badge-deg">Degree</span>
+        </div>
+        <div class="edu-item reveal">
+          <div class="edu-dot"></div>
+          <div class="edu-year">2022</div>
+          <div class="edu-title">Linux Fundamentals (LFS101)</div>
+          <div class="edu-org">The Linux Foundation / edX</div>
+          <span class="edu-badge badge-done">Completed</span>
+        </div>
+        <div class="edu-item reveal">
+          <div class="edu-dot"></div>
+          <div class="edu-year">2023</div>
+          <div class="edu-title">Python for Everybody</div>
+          <div class="edu-org">University of Michigan / Coursera</div>
+          <span class="edu-badge badge-done">Completed</span>
+        </div>
+        <div class="edu-item reveal">
+          <div class="edu-dot"></div>
+          <div class="edu-year">2024</div>
+          <div class="edu-title">Proxmox VE Administration</div>
+          <div class="edu-org">training.proxmox.com</div>
+          <span class="edu-badge badge-done">Completed</span>
+        </div>
+        <div class="edu-item reveal">
+          <div class="edu-dot"></div>
+          <div class="edu-year">2025 →</div>
+          <div class="edu-title">LPIC-1 Linux Administrator</div>
+          <div class="edu-org">Linux Professional Institute</div>
+          <span class="edu-badge badge-prog">In Progress</span>
+        </div>
       </div>
     </div>
 
-    <div class="project-card">
-      <div class="project-header">
-        <span class="project-icon">📡</span>
-        <span class="project-badge">Automation</span>
-      </div>
-      <h3>Linux Automation Suite</h3>
-      <p>
-        Python scripts for scheduled backups, system health monitoring with Telegram alerts,
-        log parsing, and remote API integrations — all with structured logging and
-        environment-based configuration so nothing is hardcoded.
-      </p>
-      <div class="project-stack">
-        <span class="stack-tag">Python</span>
-        <span class="stack-tag">Bash</span>
-        <span class="stack-tag">cron</span>
-        <span class="stack-tag">Telegram API</span>
-        <span class="stack-tag">REST</span>
+    <!-- Cert cards -->
+    <div>
+      <h3 style="font-size:14px;color:var(--muted2);font-weight:500;margin-bottom:28px;letter-spacing:.5px">CERTIFICATIONS &amp; COURSES</h3>
+      <div class="cert-grid">
+        <div class="cert-card reveal">
+          <div class="cert-icon">🐧</div>
+          <div>
+            <div class="cert-name">Introduction to Linux (LFS101)</div>
+            <div class="cert-org">The Linux Foundation</div>
+            <div class="cert-meta"><span class="cert-free">FREE</span><span class="cert-year">edx.org</span></div>
+          </div>
+        </div>
+        <div class="cert-card reveal">
+          <div class="cert-icon">🐍</div>
+          <div>
+            <div class="cert-name">Python for Everybody Specialisation</div>
+            <div class="cert-org">University of Michigan</div>
+            <div class="cert-meta"><span class="cert-year">Coursera</span></div>
+          </div>
+        </div>
+        <div class="cert-card reveal">
+          <div class="cert-icon">🖥️</div>
+          <div>
+            <div class="cert-name">Proxmox VE Administration</div>
+            <div class="cert-org">Proxmox Server Solutions</div>
+            <div class="cert-meta"><span class="cert-free">FREE</span><span class="cert-year">training.proxmox.com</span></div>
+          </div>
+        </div>
+        <div class="cert-card reveal">
+          <div class="cert-icon">🤖</div>
+          <div>
+            <div class="cert-name">Running AI Locally with Ollama</div>
+            <div class="cert-org">Self-directed — Ollama documentation &amp; homelab</div>
+            <div class="cert-meta"><span class="cert-year">2024 – present</span></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── SKILLS ────────────────────────────────────────────────────── -->
+<!-- SKILLS -->
 <section id="skills">
   <div class="section-tag">// toolkit</div>
   <h2>Skills</h2>
-  <p class="section-intro">
-    Tools I use regularly — not a keyword dump, just what I actually know.
-  </p>
-
+  <p class="section-intro">Tools I use regularly — not a keyword dump, just what I actually know.</p>
   <div class="skills-wrapper">
-    <div class="skill-group">
-      <div class="skill-group-title">Linux</div>
-      <div class="skill-pills">
-        <span class="pill">Ubuntu</span>
-        <span class="pill">Debian</span>
-        <span class="pill">CentOS</span>
-        <span class="pill">systemd</span>
-        <span class="pill">SSH</span>
-        <span class="pill">ufw / iptables</span>
-        <span class="pill">cron</span>
-      </div>
-    </div>
-
-    <div class="skill-group">
-      <div class="skill-group-title">Virtualisation</div>
-      <div class="skill-pills">
-        <span class="pill">Proxmox VE</span>
-        <span class="pill">LXC</span>
-        <span class="pill">KVM</span>
-        <span class="pill">ZFS</span>
-        <span class="pill">Bridged Networking</span>
-        <span class="pill">NAT</span>
-      </div>
-    </div>
-
-    <div class="skill-group">
-      <div class="skill-group-title">AI &amp; LLM</div>
-      <div class="skill-pills">
-        <span class="pill">Ollama</span>
-        <span class="pill">OpenClaw</span>
-        <span class="pill">DeepSeek</span>
-        <span class="pill">Llama</span>
-        <span class="pill">Mistral</span>
-        <span class="pill">Qwen</span>
-      </div>
-    </div>
-
-    <div class="skill-group">
-      <div class="skill-group-title">Scripting &amp; Dev</div>
-      <div class="skill-pills">
-        <span class="pill">Python</span>
-        <span class="pill">Bash</span>
-        <span class="pill">Git</span>
-        <span class="pill">REST APIs</span>
-        <span class="pill">nginx</span>
-        <span class="pill">Docker</span>
-      </div>
-    </div>
-  </div>
-
-  <br/><br/>
-  <div class="terminal">
-    <div class="terminal-bar">
-      <span class="t-red"></span>
-      <span class="t-yellow"></span>
-      <span class="t-green"></span>
-    </div>
-    <div><span class="t-dim">~$</span> <span class="t-cmd">ssh root@your-server.com</span></div>
-    <div><span class="t-out">Connected to your-server.com — Ubuntu 24.04 LTS</span></div>
-    <div><span class="t-dim">~$</span> <span class="t-cmd">ollama run deepseek-r1:8b</span></div>
-    <div><span class="t-out">Model loaded. Ready for inference.</span></div>
-    <div><span class="t-dim">~$</span> <span class="t-cmd">systemctl status openclaw</span></div>
-    <div><span class="t-out">● openclaw.service — Active: <span style="color:#28c840">active (running)</span></span></div>
-    <div><span class="t-dim">~$</span> <span class="t-cmd">_</span></div>
+    <div class="skill-group reveal"><div class="skill-group-title">Linux</div><div class="skill-pills"><span class="pill">Ubuntu</span><span class="pill">Debian</span><span class="pill">CentOS</span><span class="pill">systemd</span><span class="pill">SSH</span><span class="pill">ufw/iptables</span><span class="pill">cron</span></div></div>
+    <div class="skill-group reveal"><div class="skill-group-title">Virtualisation</div><div class="skill-pills"><span class="pill">Proxmox VE</span><span class="pill">LXC</span><span class="pill">KVM</span><span class="pill">ZFS</span><span class="pill">Bridged Net</span><span class="pill">NAT</span></div></div>
+    <div class="skill-group reveal"><div class="skill-group-title">AI &amp; LLM</div><div class="skill-pills"><span class="pill">Ollama</span><span class="pill">OpenClaw</span><span class="pill">DeepSeek</span><span class="pill">Llama</span><span class="pill">Mistral</span><span class="pill">Qwen</span></div></div>
+    <div class="skill-group reveal"><div class="skill-group-title">Scripting &amp; Dev</div><div class="skill-pills"><span class="pill">Python</span><span class="pill">Bash</span><span class="pill">Git</span><span class="pill">REST APIs</span><span class="pill">nginx</span><span class="pill">Docker</span></div></div>
   </div>
 </section>
 
-<!-- ── CONTACT ───────────────────────────────────────────────────── -->
+<!-- CONTACT -->
 <section id="contact">
   <div class="contact-inner">
     <div class="section-tag">// get in touch</div>
     <h2>Work with me</h2>
-    <p>
-      Message me before ordering and I'll tell you honestly whether your project is a good fit
-      and what's achievable on your hardware or budget.
-    </p>
+    <p>Message me before ordering and I'll tell you honestly whether your project is a good fit and what's achievable on your hardware or budget.</p>
     <div class="contact-links">
-      <a class="btn btn-primary" href="https://www.fiverr.com/tleung927" target="_blank" rel="noopener">
-        🛒 Hire me on Fiverr
-      </a>
-      <a class="btn btn-outline" href="mailto:tongleung1@gmail.com">
-        ✉️ tongleung1@gmail.com
-      </a>
+      <a class="btn btn-primary" href="https://www.fiverr.com/tleung927" target="_blank" rel="noopener">🛒 Hire me on Fiverr</a>
+      <a class="btn btn-outline" href="mailto:tongleung1@gmail.com">✉️ tongleung1@gmail.com</a>
     </div>
   </div>
 </section>
 
-<!-- ── FOOTER ────────────────────────────────────────────────────── -->
+<!-- FOOTER -->
 <footer>
-  <span style="color:var(--accent)">T. Leung</span> &nbsp;·&nbsp;
-  Linux &amp; AI Infrastructure &nbsp;·&nbsp;
-  Built with plain HTML &nbsp;·&nbsp;
-  <span id="year"></span>
+  <span style="color:var(--accent)">T. Leung</span> &nbsp;·&nbsp; Linux &amp; AI Infrastructure &nbsp;·&nbsp; <span id="year"></span>
 </footer>
 
-<!-- ── SCRIPTS ───────────────────────────────────────────────────── -->
 <script>
-  // Year
-  document.getElementById('year').textContent = new Date().getFullYear();
+// ── YEAR
+document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Typing effect
-  const lines = [
-    'Deploying Ollama + OpenClaw on LXC...',
-    'Setting up Proxmox VE + containers...',
-    'Automating your Linux server...',
-    'Building private AI assistants...',
-  ];
-  let li = 0, ci = 0, deleting = false;
-  const el = document.getElementById('typed');
+// ── TYPING HERO
+const lines = [
+  'Deploying Ollama + OpenClaw on LXC...',
+  'Configuring Proxmox VE + containers...',
+  'Writing Python automation scripts...',
+  'Building private AI assistants...',
+];
+let li=0, ci=0, del=false;
+const el = document.getElementById('typed');
+function type(){
+  const line=lines[li];
+  if(!del){ el.textContent=line.slice(0,++ci); if(ci===line.length){del=true;setTimeout(type,2000);return;} }
+  else{ el.textContent=line.slice(0,--ci); if(ci===0){del=false;li=(li+1)%lines.length;} }
+  setTimeout(type, del?28:52);
+}
+type();
 
-  function type() {
-    const line = lines[li];
-    if (!deleting) {
-      el.textContent = line.slice(0, ++ci);
-      if (ci === line.length) { deleting = true; setTimeout(type, 2000); return; }
-    } else {
-      el.textContent = line.slice(0, --ci);
-      if (ci === 0) { deleting = false; li = (li + 1) % lines.length; }
-    }
-    setTimeout(type, deleting ? 30 : 55);
+// ── CANVAS MATRIX BACKGROUND
+(function(){
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789><[]{}|/\\abcdefghijklmnopqrstuvwxyz';
+  const serverTerms = ['root@', 'ssh', 'apt', 'pct', 'python3', 'systemctl', 'ollama', 'nginx', '192.168.', '/dev/', 'grep', 'chmod'];
+  const fontSize = 13;
+  let cols, drops;
+  function init(){
+    cols = Math.floor(canvas.width / fontSize);
+    drops = Array(cols).fill(1);
   }
-  type();
+  init();
+  window.addEventListener('resize', init);
+  function draw(){
+    ctx.fillStyle = 'rgba(8,12,20,0.06)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = '#00d4aa';
+    ctx.font = fontSize + 'px "JetBrains Mono", monospace';
+    for(let i=0;i<drops.length;i++){
+      const term = serverTerms[Math.floor(Math.random()*serverTerms.length)];
+      const text = Math.random() > 0.97 ? term : chars[Math.floor(Math.random()*chars.length)];
+      ctx.globalAlpha = Math.random()*0.6+0.2;
+      ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+      if(drops[i]*fontSize > canvas.height && Math.random()>0.975) drops[i]=0;
+      drops[i]++;
+    }
+    ctx.globalAlpha = 1;
+  }
+  setInterval(draw, 45);
+})();
 
-  // Scroll-in animation
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.1 });
+// ── SCROLL REVEAL
+const revealObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
 
-  document.querySelectorAll('.card, .project-card, .skill-group').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    observer.observe(el);
+// ── RESTART showcase animations on scroll into view
+const showcaseObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('[class*="type-line"], [class*="fade-in"]').forEach(el=>{
+        el.style.animation='none';
+        void el.offsetWidth;
+        el.style.animation='';
+      });
+    }
   });
+},{threshold:0.3});
+document.querySelectorAll('.showcase-card').forEach(c=>showcaseObs.observe(c));
 </script>
 </body>
 </html>
